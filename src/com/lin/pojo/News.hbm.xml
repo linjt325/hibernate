@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-8-30 15:00:03 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping package="com.lin.pojo">
+    <class name="News" table="NEWS" dynamic-update="true">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <!--             主键生成策略  assigned 应用程序控制  不自动生成    native 数据库底层的生成策略 -->
+<!--             increment: 由 hibernate 自增的方式 -->
+<!-- 			 identity:数据库底层生成标识符 -->
+<!-- sequence 先从底层数据库的news_seq 序列中获得一个唯一的标识号,再把它作为主键值 ,需要底层数据库支持序列,  OID 必须为long,int 或short类型 ,byte 会抛出异常-->
+<!-- hilo  hibernate 根据  high/low 算法生成标识符 -->
+<!--  native 根据底层数据库自动生成标识符的方式,自动选择identity,sequence或者hilo -->
+            <generator class="native" />
+        </id>
+        <property name="title" type="string" index="news_index" unique="true" update="false"     >
+            <column name="TITLE" length="20"/>
+        </property>
+        <property name="author" type="java.lang.String" index="news_index">
+            <column name="AUTHOR" />
+        </property>
+        <property name="date" type="date">
+            <column name="DATE" />
+        </property>
+<!--         映射派生属性 -->
+        <property name="desc" formula="(SELECT concat(AUTHOR,':',TITLE) from NEWS n where n.id=id )"></property>
+        
+        <!-- 可以使用column中的sql-type 属性来精确指定数据库中的数据类型 -->
+        <property name="content" >
+        	<column name="CONTENT" sql-type="longtext"></column>
+       	</property>
+        
+        <property name="image" type="blob" column="IMAGE"></property>
+        
+    </class>
+</hibernate-mapping>
